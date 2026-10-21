@@ -1,0 +1,50 @@
+users
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  name:string [present, unique]
+  email:string [present, unique, format(valid email)]
+  password:string [present, length(8+)]
+
+  ------------------------------------------------------------    
+
+  has_many :pet_sittings, foreign_key: pet_owner_id
+  has_many :pet_sittings, foreign_key: pet_sitter_id
+  has_many :owned_pets, through: :pet_sittings, source: :pet_owner
+  has_many :sitted_pets, through: :pet_sittings, source: :pet_sitter
+
+pets
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  name:string [present]
+  age:integer [present]
+  animal:string [present]
+
+  ------------------------------------------------------------  
+
+  has_many :pet_sittings
+  has_many :pet_owners, through: :pet_sittings
+  has_many :pet_sitters, through: :pet_sittings
+
+pet_sittings
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  pet_owner_id:integer [present]
+  pet_sitter_id:integer [present]
+  pet_id:integer [present]
+
+  start_time:datetime [present]
+  end_time:datetime [present]
+  hourly_rate:decimal [present]
+  location:string [present]
+
+  ------------------------------------------------------------
+
+  belongs_to :pet_owner, class_name: "User"
+  belongs_to :pet_sitter, class_name: "User"
+  belongs_to :pet
