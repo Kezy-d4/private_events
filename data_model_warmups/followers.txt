@@ -1,0 +1,41 @@
+users
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  name:string [present, unique]
+  email:string [present, unique, format(valid email)]
+  password:string [present, length(8+)]  
+
+  ------------------------------------------------------------    
+
+  has_many :posts
+  has_many :follower_users, through: :follows, foreign_key: :followed_user_id
+  has_many :followed_users, through: :follows, foreign_key: :follower_user_id
+
+posts
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  user_id:integer [present]
+
+  title:string [present, length(<=200)]
+  body:text [present, length(<=2000)]
+
+  ------------------------------------------------------------    
+
+  belongs_to :user
+
+follows
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  followed_user_id:integer [present]
+  follower_user_id:integer [present]
+
+  ------------------------------------------------------------  
+
+  belongs_to :followed_user, class_name: "User"
+  belongs_to :follower_user, class_name: "User"
