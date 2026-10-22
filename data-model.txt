@@ -1,0 +1,44 @@
+users
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  name:string [present, unique, length(2-24)]
+  email:string [present, unique, format(valid email)]
+  password:string [present, length(8+)]  
+
+  ------------------------------------------------------------------------------    
+
+  has_many :organized_events, through: :event_registrations, source: :organizer 
+  has_many :attended_events, through: :event_registrations, source: :attendee
+
+events
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]  
+
+  activity:string [present]
+  location:string [present]
+  start_time:datetime [present]
+  end_time:datetime
+  max_attendees:integer [present]
+
+  ------------------------------------------------------------------------------
+
+  has_many :event_registrations   
+
+event_registrations
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]  
+
+  event_id:integer [present]
+  organizer_id:integer [present]
+  attendee_id:integer [present]
+  ticket_price:decimal [present]
+
+  ------------------------------------------------------------------------------
+
+  belongs_to :event
+  belongs_to :organizer, class_name: "User"
+  belongs_to :attendee, class_name: "User"
