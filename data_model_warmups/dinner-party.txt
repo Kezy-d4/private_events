@@ -1,0 +1,43 @@
+users
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  name:string [present, unique]
+  email:string [present, unique, format(valid email)]
+  password:string [present, length(8+)]
+
+  ------------------------------------------------------------  
+
+  has_many :hosted_parties, through: :invitations, source: :party_host
+  has_many :attended_parties, through: :invitations, source: :party_attendee
+
+parties
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  location:string [present]
+  time:datetime [present]
+
+  ------------------------------------------------------------
+
+  has_many :invitations
+
+invitations
+  id:integer [present, unique]
+  created_at:datetime [present]
+  updated_at:datetime [present]
+
+  party_id:integer [present]
+  party_host_id:integer [present]
+  party_attendee_id:integer [present]
+
+  title:string [present, length(<=200)]
+  body:text [present, length(<=1000)]
+
+  ------------------------------------------------------------  
+
+  belongs_to :party
+  belongs_to :party_host, class_name: "User"
+  belongs_to :party_attendee, class_name: "User"
